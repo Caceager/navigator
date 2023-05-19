@@ -1,4 +1,4 @@
-const { isCommand, isQueso, convertAudioFile, getCi } = require("./utils");
+const { isCommand, convertAudioFile, getCi } = require("./utils");
 const fs = require("fs");
 const {MessageMedia} = require("whatsapp-web.js");
 const { completion, transcribe } = require("./gpt");
@@ -12,12 +12,7 @@ async function sendTranscription(message) {
     message.reply(await transcribe())
 }
 const handleMessage = async (message, chat, author) => {
-    if (!isCommand(message.body) && isQueso(message.body)) {
-        const emojis = ["🥵", "😏", "😂", "🧀"]
-        const index = Math.floor(Math.random() * 3);
-        await message.react(emojis[index]);
-    }
-    else if (isCommand(message.body)) {
+    if (isCommand(message.body)) {
         const response = await executeCommand(message);
         if (response?.sticker) {
             const chat = await message.getChat();
